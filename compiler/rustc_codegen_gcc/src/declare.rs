@@ -192,10 +192,30 @@ fn declare_raw_fn<'gcc>(
             .enumerate()
             .map(|(index, param)| cx.context.new_parameter(None, *param, format!("param{}", index))) // FIXME(antoyo): set name.
             .collect();
+        // libgccjit rejects '@' in function names. ELF versioned imports need
+        // an ordinary identifier plus an assembler .symver alias. Keep the
+        // original symbol as the cache key, so repeated declarations reuse it.
+        let versioned_alias;
+        let gcc_name = if cx.linkage.get() == FunctionType::Extern
+            && cx.tcx.sess.target.os == rustc_target::spec::Os::Linux
+            && name.contains('@')
+        {
+            versioned_alias = cx.generate_local_symbol_name("__rustc_gcc_symver").replace('.', "_");
+            cx.context.add_top_level_asm(None, &format!(".symver {versioned_alias}, {name}"));
+            versioned_alias.as_str()
+        } else {
+            name
+        };
         #[cfg(not(feature = "master"))]
-        let name = &mangle_name(name);
-        let func =
-            cx.context.new_function(None, cx.linkage.get(), return_type, &params, name, variadic);
+        let gcc_name = &mangle_name(gcc_name);
+        let func = cx.context.new_function(
+            None,
+            cx.linkage.get(),
+            return_type,
+            &params,
+            gcc_name,
+            variadic,
+        );
         #[cfg(feature = "master")]
         if let Some(attribute) = callconv {
             func.add_attribute(attribute);

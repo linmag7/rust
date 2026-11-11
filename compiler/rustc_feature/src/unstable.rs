@@ -621,6 +621,7 @@ declare_features! (
     /// Allows fused `loop`/`match` for direct intraprocedural jumps.
     (incomplete, loop_match, "1.90.0", Some(132306)),
     /// Target features on m68k.
+    (unstable, alpha_target_feature, "1.101.0", Some(44839)),
     (unstable, m68k_target_feature, "1.85.0", Some(134328)),
     /// Allow `macro_rules!` attribute rules
     (unstable, macro_attr, "1.91.0", Some(143547)),

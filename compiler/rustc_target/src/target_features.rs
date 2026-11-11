@@ -1024,6 +1024,12 @@ const SPARC_FEATURES: &[(&str, Stability, ImpliedFeatures)] = &[
     // tidy-alphabetical-end
 ];
 
+const ALPHA_FEATURES: &[(&str, Stability, ImpliedFeatures)] = &[
+    // tidy-alphabetical-start
+    ("ev6", Unstable(sym::alpha_target_feature), &[]),
+    // tidy-alphabetical-end
+];
+
 static M68K_FEATURES: &[(&str, Stability, ImpliedFeatures)] = &[
     // tidy-alphabetical-start
     ("isa-68000", Unstable(sym::m68k_target_feature), &[]),
@@ -1125,6 +1131,7 @@ pub fn all_rust_features() -> impl Iterator<Item = (&'static str, Stability)> {
         IBMZ_FEATURES,
         SPARC_FEATURES,
         M68K_FEATURES,
+        ALPHA_FEATURES,
         AVR_FEATURES,
     ]
     .into_iter()
@@ -1159,6 +1166,7 @@ pub fn feature_to_arch_names(feature: &str) -> Vec<&'static str> {
     check_arch_feats!("s390x", IBMZ_FEATURES);
     check_arch_feats!("sparc", SPARC_FEATURES);
     check_arch_feats!("m68k", M68K_FEATURES);
+    check_arch_feats!("alpha", ALPHA_FEATURES);
     check_arch_feats!("avr", AVR_FEATURES);
     arches.sort();
     arches.dedup();
@@ -1241,6 +1249,7 @@ impl Target {
             Arch::S390x => IBMZ_FEATURES,
             Arch::Sparc | Arch::Sparc64 => SPARC_FEATURES,
             Arch::M68k => M68K_FEATURES,
+            Arch::Alpha => ALPHA_FEATURES,
             Arch::Avr => AVR_FEATURES,
             Arch::Xtensa => XTENSA_FEATURES,
             Arch::AmdGpu | Arch::Msp430 | Arch::SpirV | Arch::Other(_) => &[],
@@ -1279,7 +1288,7 @@ impl Target {
             Arch::CSky => CSKY_FEATURES_FOR_CORRECT_FIXED_LENGTH_VECTOR_ABI,
             // FIXME: for some tier3 targets, we are overly cautious and always give warnings
             // when passing args in vector registers.
-            Arch::Msp430 | Arch::SpirV | Arch::Xtensa | Arch::Other(_) => &[],
+            Arch::Alpha | Arch::Msp430 | Arch::SpirV | Arch::Xtensa | Arch::Other(_) => &[],
         }
     }
 

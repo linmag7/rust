@@ -31,6 +31,7 @@ const MIN_ALIGN: usize = if cfg!(any(
     8
 } else if cfg!(any(
     target_arch = "x86_64",
+    target_arch = "alpha",
     target_arch = "aarch64",
     target_arch = "arm64ec",
     target_arch = "loongarch64",

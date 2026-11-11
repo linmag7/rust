@@ -29,7 +29,7 @@ pub const unwinder_private_data_size: usize =
         all(target_arch = "aarch64", target_pointer_width = "64", not(target_os = "windows")) => 2,
         all(target_arch = "aarch64", target_pointer_width = "64", target_os = "windows") => 6,
         all(target_arch = "aarch64", target_pointer_width = "32") => 5,
-        target_arch = "m68k" => 2,
+        any(target_arch = "m68k", target_arch = "alpha") => 2,
         any(target_arch = "mips", target_arch = "mips32r6") => 2,
         target_arch = "csky" => 2,
         any(target_arch = "mips64", target_arch = "mips64r6") => 2,

@@ -897,6 +897,13 @@ impl Builder<'_> {
                         .rustc_cmd(compiler)
                         .arg("--target")
                         .arg(target.rustc_target_arg())
+                        .args(
+                            self.config
+                                .target_config
+                                .get(&target)
+                                .map(|t| &t.rustflags)
+                                .unwrap_or(&self.config.rust_rustflags),
+                        )
                         // FIXME(#152709): -Zunstable-options is to handle JSON targets.
                         // Remove when JSON targets are stabilized.
                         .arg("-Zunstable-options")

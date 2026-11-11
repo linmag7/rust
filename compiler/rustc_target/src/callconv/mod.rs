@@ -11,6 +11,7 @@ pub use crate::spec::AbiMap;
 use crate::spec::{Arch, HasTargetSpec, HasX86AbiOpt, RustcAbi};
 
 mod aarch64;
+mod alpha;
 mod amdgpu;
 mod arm;
 mod avr;
@@ -729,6 +730,7 @@ impl<'a, Ty> FnAbi<'a, Ty> {
             Arch::CSky => csky::compute_abi_info(cx, self),
             Arch::Mips | Arch::Mips32r6 => mips::compute_abi_info(cx, self),
             Arch::Mips64 | Arch::Mips64r6 => mips64::compute_abi_info(cx, self),
+            Arch::Alpha => alpha::compute_abi_info(cx, self),
             Arch::PowerPC => powerpc::compute_abi_info(cx, self),
             Arch::PowerPC64 => powerpc64::compute_abi_info(cx, self),
             Arch::S390x => s390x::compute_abi_info(cx, self),

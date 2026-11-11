@@ -319,6 +319,7 @@ impl<'ll, 'tcx> AsmBuilderMethods<'tcx> for Builder<'_, 'll, 'tcx> {
                 InlineAsmArch::M68k => {
                     constraints.push("~{ccr}".to_string());
                 }
+                InlineAsmArch::Alpha => {}
                 InlineAsmArch::CSKY => {
                     constraints.push("~{psr}".to_string());
                 }
@@ -902,6 +903,8 @@ fn reg_to_llvm(reg: InlineAsmRegOrRegClass, layout: Option<&TyAndLayout<'_>>) ->
             M68k(M68kInlineAsmRegClass::reg) => "r",
             M68k(M68kInlineAsmRegClass::reg_addr) => "a",
             M68k(M68kInlineAsmRegClass::reg_data) => "d",
+            Alpha(AlphaInlineAsmRegClass::reg) => "r",
+            Alpha(AlphaInlineAsmRegClass::freg) => "f",
             CSKY(CSKYInlineAsmRegClass::reg) => "r",
             CSKY(CSKYInlineAsmRegClass::freg) => "f",
             SpirV(SpirVInlineAsmRegClass::reg) => bug!("LLVM backend does not support SPIR-V"),
@@ -1020,6 +1023,7 @@ fn modifier_to_llvm(
         Msp430(_) => None,
         SpirV(SpirVInlineAsmRegClass::reg) => bug!("LLVM backend does not support SPIR-V"),
         M68k(_) => None,
+        Alpha(_) => None,
         CSKY(_) => None,
         Err => unreachable!(),
     }
@@ -1128,6 +1132,8 @@ fn dummy_output_type<'ll>(cx: &CodegenCx<'ll, '_>, reg: InlineAsmRegClass) -> Ty
         Sparc(SparcInlineAsmRegClass::dreg) => cx.type_f64(),
         Sparc(SparcInlineAsmRegClass::qreg) => cx.type_f128(),
         Sparc(SparcInlineAsmRegClass::yreg) => unreachable!("clobber-only"),
+        Alpha(AlphaInlineAsmRegClass::reg) => cx.type_i64(),
+        Alpha(AlphaInlineAsmRegClass::freg) => cx.type_f64(),
         Msp430(Msp430InlineAsmRegClass::reg) => cx.type_i16(),
         M68k(M68kInlineAsmRegClass::reg) => cx.type_i32(),
         M68k(M68kInlineAsmRegClass::reg_addr) => cx.type_i32(),
