@@ -812,6 +812,14 @@ impl Step for StdLink {
             }
 
             builder.cp_link_r(&builder.initial_sysroot.join("lib"), &sysroot.join("lib"));
+            if builder.local_rebuild && target != builder.host_target {
+                add_to_sysroot(
+                    builder,
+                    &libdir,
+                    &hostdir,
+                    &build_stamp::libstd_stamp(builder, compiler, target),
+                );
+            }
         } else {
             if builder.download_rustc() {
                 // Ensure there are no CI-rustc std artifacts.
