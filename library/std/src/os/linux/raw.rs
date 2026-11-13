@@ -371,3 +371,21 @@ mod arch {
         pub __unused: [c_long; 3],
     }
 }
+
+#[cfg(target_arch = "alpha")]
+mod arch {
+    #[stable(feature = "raw_ext", since = "1.1.0")]
+    pub type blkcnt_t = libc::blkcnt_t;
+    #[stable(feature = "raw_ext", since = "1.1.0")]
+    pub type blksize_t = libc::blksize_t;
+    #[stable(feature = "raw_ext", since = "1.1.0")]
+    pub type ino_t = libc::ino_t;
+    #[stable(feature = "raw_ext", since = "1.1.0")]
+    pub type nlink_t = libc::nlink_t;
+    #[stable(feature = "raw_ext", since = "1.1.0")]
+    pub type off_t = libc::off_t;
+    #[stable(feature = "raw_ext", since = "1.1.0")]
+    pub type stat = libc::stat;
+    #[stable(feature = "raw_ext", since = "1.1.0")]
+    pub type time_t = libc::time_t;
+}
