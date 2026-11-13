@@ -251,7 +251,10 @@ impl CodegenBackend for GccCodegenBackend {
             // Get the second TargetInfo with the correct CPU features by setting the arch.
             let context = Context::default();
             if target_cpu != "generic" {
-                context.add_command_line_option(format!("-march={}", target_cpu));
+                context.add_command_line_option(gcc_util::target_cpu_option(
+                    &sess.target.arch,
+                    &target_cpu,
+                ));
             }
             gcc_util::add_target_info_feature_options(
                 &context,
@@ -515,11 +518,12 @@ fn target_config(sess: &EarlySession, target_info: &SharedTargetInfo) -> TargetC
 
     let has_reliable_f16 = target_info.supports_target_dependent_type(CType::Float16);
     let has_reliable_f16b = target_info.supports_target_dependent_type(CType::BFloat16);
-    let has_reliable_f128 = target_info.supports_target_dependent_type(CType::Float128);
+    // Alpha exposes the type, but quad-precision comparisons currently ICE in GCC.
+    let has_reliable_f128 = sess.target.arch != rustc_target::spec::Arch::Alpha
+        && target_info.supports_target_dependent_type(CType::Float128);
 
     TargetConfig {
         internal_target_features,
-        // There are no known bugs with GCC support for f16 or f128
         has_reliable_f16,
         has_reliable_f16_math: has_reliable_f16,
         has_reliable_f16b,
