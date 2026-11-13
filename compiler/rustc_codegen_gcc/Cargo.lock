@@ -117,9 +117,7 @@ dependencies = [
 
 [[package]]
 name = "libc"
-version = "0.2.186"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "68ab91017fe16c622486840e4c83c9a37afeff978bd239b5293d61ece587de66"
+version = "0.2.191"
 
 [[package]]
 name = "linux-raw-sys"
@@ -196,8 +194,6 @@ dependencies = [
 [[package]]
 name = "rustix"
 version = "1.1.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b6fe4565b9518b83ef4f91bb47ce29620ca828bd32cb7e408f0062e9930ba190"
 dependencies = [
  "bitflags",
  "errno",
@@ -334,3 +330,15 @@ checksum = "6f42320e61fe2cfd34354ecb597f86f413484a798ba44a8ca1165c58d42da6c1"
 dependencies = [
  "bitflags",
 ]
+
+[[patch.unused]]
+name = "nix"
+version = "0.30.1"
+
+[[patch.unused]]
+name = "nix"
+version = "0.31.3"
+
+[[patch.unused]]
+name = "rustix"
+version = "1.1.5"
