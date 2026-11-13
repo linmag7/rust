@@ -1317,6 +1317,7 @@ pub(super) fn emit_va_arg<'ll, 'tcx>(
             ForceRightAdjust::No,
         ),
 
+        Arch::Alpha => bug!("Alpha code generation requires the GCC backend"),
         Arch::Bpf => bug!("bpf does not support c-variadic functions"),
         Arch::SpirV => bug!("spirv does not support c-variadic functions"),
 

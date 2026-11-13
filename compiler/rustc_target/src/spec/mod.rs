@@ -1313,6 +1313,7 @@ supported_targets! {
     ("loongarch64-unknown-linux-gnu", loongarch64_unknown_linux_gnu),
     ("loongarch64-unknown-linux-musl", loongarch64_unknown_linux_musl),
     ("m68k-unknown-linux-gnu", m68k_unknown_linux_gnu),
+    ("alphaev6-unknown-linux-gnu", alphaev6_unknown_linux_gnu),
     ("m68k-unknown-none-elf", m68k_unknown_none_elf),
     ("csky-unknown-linux-gnuabiv2", csky_unknown_linux_gnuabiv2),
     ("csky-unknown-linux-gnuabiv2hf", csky_unknown_linux_gnuabiv2hf),
@@ -1772,6 +1773,7 @@ crate::target_spec_enum! {
         LoongArch32 = "loongarch32",
         LoongArch64 = "loongarch64",
         M68k = "m68k",
+        Alpha = "alpha",
         Mips = "mips",
         Mips32r6 = "mips32r6",
         Mips64 = "mips64",
@@ -1809,6 +1811,7 @@ impl Arch {
             Self::LoongArch32 => sym::loongarch32,
             Self::LoongArch64 => sym::loongarch64,
             Self::M68k => sym::m68k,
+            Self::Alpha => sym::alpha,
             Self::Mips => sym::mips,
             Self::Mips32r6 => sym::mips32r6,
             Self::Mips64 => sym::mips64,
@@ -1841,7 +1844,7 @@ impl Arch {
             AmdGpu | Arm | Arm64EC | Avr | Bpf | CSky | Hexagon | LoongArch32 | LoongArch64
             | M68k | Mips | Mips32r6 | Mips64 | Mips64r6 | Msp430 | Nvptx64 | PowerPC
             | PowerPC64 | S390x | Sparc | Sparc64 | SpirV | Wasm32 | Wasm64 | X86 | X86_64
-            | Xtensa | Other(_) => false,
+            | Xtensa | Alpha | Other(_) => false,
         }
     }
 }
@@ -2088,7 +2091,7 @@ impl Target {
 
         match self.arch {
             // These targets just inherently do not support c-variadic definitions.
-            Bpf | SpirV => CVariadicStatus::NotSupported,
+            Alpha | Bpf | SpirV => CVariadicStatus::NotSupported,
 
             // The c-variadic ABI for this target may change in the future, per this comment in
             // clang:
@@ -3032,6 +3035,7 @@ impl Target {
     ) -> Option<(object::Architecture, Option<object::SubArchitecture>)> {
         use object::Architecture;
         Some(match self.arch {
+            Arch::Alpha => (Architecture::Alpha, None),
             Arch::Arm => (Architecture::Arm, None),
             Arch::AArch64 => (
                 if self.pointer_width == 32 {

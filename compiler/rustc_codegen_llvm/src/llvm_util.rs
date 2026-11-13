@@ -380,6 +380,7 @@ fn update_target_reliable_float_cfg(target: &Target, cfg: &mut TargetConfig) {
     let (major, _, _) = version;
 
     cfg.has_reliable_f16 = match (target_arch, target_os) {
+        (Arch::Alpha, _) => false,
         // MinGW ABI bugs <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=115054> resolved in GCC 16
         // but our toolchain hasn't been updated.
         (Arch::X86_64, Os::Windows) if *target_env == Env::Gnu && *target_abi != CfgAbi::Llvm => {
@@ -410,6 +411,7 @@ fn update_target_reliable_float_cfg(target: &Target, cfg: &mut TargetConfig) {
     };
 
     cfg.has_reliable_f128 = match (target_arch, target_os) {
+        (Arch::Alpha, _) => false,
         // Unsupported https://github.com/llvm/llvm-project/issues/121122
         (Arch::AmdGpu, _) => false,
         (Arch::Arm64EC, _) if major < 23 => false, // (fixed in llvm23)
